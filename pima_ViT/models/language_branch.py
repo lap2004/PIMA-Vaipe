@@ -13,6 +13,9 @@ except ImportError:
     HAS_PADDLEOCR = False
 
 class PrescriptionRecognizer(nn.Module):
+    """
+    Extracts semantic text features from prescription text using a language model (MiniLM).
+    """
     def __init__(self, embed_dim=256, use_ocr=False):
         super(PrescriptionRecognizer, self).__init__()
         

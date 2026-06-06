@@ -17,6 +17,9 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class PrescriptionPillData(Dataset):
+    """
+    Custom Dataset class for loading pill-prescription image pairs, bounding boxes, and graph relations.
+    """
     def __init__(self, json_files, mode, args):
         self.args = args
         if getattr(args, 'use_ocr', False):
@@ -79,13 +82,7 @@ class PrescriptionPillData(Dataset):
             src_range_x = (src_row["x_min"], src_row["x_max"])
             src_range_y = (src_row["y_min"], src_row["y_max"])
 
-            # Calculate the center of the Box
-            src_center_x, src_center_y = np.mean(
-                src_range_x), np.mean(src_range_y)
-
-            neighbor_vert_top = []
             neighbor_vert_bot = []
-            neighbor_hozi_left = []
             neighbor_hozi_right = []
 
             for dest_idx, dest_row in enumerate(bboxes):
@@ -110,10 +107,6 @@ class PrescriptionPillData(Dataset):
                         neighbor_hozi_right.append(dest_idx)
 
             neighbors = []
-            # if neighbor_hozi_left:
-            #     nei = max(neighbor_hozi_left, key=lambda x: bboxes[x]['x_max'])
-            #     neighbors.append(nei)
-            #     G.add_edge(src_idx, nei)
 
             if neighbor_hozi_right:
                 nei = min(neighbor_hozi_right,

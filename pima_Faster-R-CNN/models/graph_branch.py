@@ -4,6 +4,9 @@ import torch.nn.functional as F
 from torch_geometric.nn import RGATConv
 
 class GraphBranch(nn.Module):
+    """
+    Models spatial relationships between text bounding boxes using Relational Graph Attention Network (R-GAT).
+    """
     def __init__(self, in_channels, hidden_channels, out_channels, num_relations=4, heads=4):
         super(GraphBranch, self).__init__()
         """
@@ -51,6 +54,9 @@ class GraphBranch(nn.Module):
         return weighted_embeddings, pill_name_probs
 
 class MultiModalCrossAttention(nn.Module):
+    """
+    Fuses visual and textual modalities using Cross-Attention, where visual features query the textual graph.
+    """
     def __init__(self, embed_dim, num_heads=4):
         super(MultiModalCrossAttention, self).__init__()
         """

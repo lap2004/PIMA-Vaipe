@@ -6,6 +6,10 @@ from .language_branch import PrescriptionRecognizer
 from .graph_branch import GraphBranch, MultiModalCrossAttention
 
 class InfoNCELoss(nn.Module):
+    """
+    Computes the InfoNCE Loss for contrastive learning between visual and textual features.
+    It brings embeddings of matched pairs closer while pushing unmatched ones apart.
+    """
     def __init__(self, temperature=0.07):
         super(InfoNCELoss, self).__init__()
         import numpy as np
@@ -25,6 +29,11 @@ class InfoNCELoss(nn.Module):
         return (loss1 + loss2) / 2
 
 class PIMA_NEW(nn.Module):
+    """
+    The main architecture of the Multimodal Cross-Attention Framework.
+    Combines Vision Branch (Pill Detector), Language Branch (Prescription Recognizer),
+    and Graph Branch (R-GAT) using Cross-Attention for pill-prescription matching.
+    """
     def __init__(self, embed_dim=256, use_ocr=False, pretrained=True, vision_model='vit'):
         super(PIMA_NEW, self).__init__()
         

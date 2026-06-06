@@ -15,6 +15,9 @@ import matplotlib.pyplot as plt
 
 
 class PrescriptionPillData(Dataset):
+    """
+    Custom Dataset class for loading pill-prescription image pairs, bounding boxes, and graph relations.
+    """
     def __init__(self, json_files, args):
         self.args = args
         self.text_sentences_tokenizer = AutoTokenizer.from_pretrained(

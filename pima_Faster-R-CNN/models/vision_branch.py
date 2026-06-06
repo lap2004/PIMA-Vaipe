@@ -5,6 +5,9 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn, FasterRCNN_Res
 from torchvision.ops import roi_align
 
 class ViTBackbone(nn.Module):
+    """
+    Vision Transformer (ViT) backbone for feature extraction.
+    """
     def __init__(self, pretrained=True):
         super(ViTBackbone, self).__init__()
         vit = torchvision.models.vit_b_16(weights='DEFAULT' if pretrained else None)
@@ -25,6 +28,9 @@ class ViTBackbone(nn.Module):
         return features
 
 class PillDetector(nn.Module):
+    """
+    Extracts visual features from pill images using a backbone network.
+    """
     def __init__(self, pretrained=True, vision_model='vit'):
         super(PillDetector, self).__init__()
         self.vision_model = vision_model

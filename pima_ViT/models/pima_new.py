@@ -6,6 +6,9 @@ from .language_branch import PrescriptionRecognizer
 from .graph_branch import GraphBranch, MultiModalCrossAttention
 
 class InfoNCELoss(nn.Module):
+    """
+    Computes the InfoNCE Loss to maximize similarity between matching pill-text pairs.
+    """
     def __init__(self, temperature=0.07):
         super(InfoNCELoss, self).__init__()
         self.temperature = temperature
@@ -21,6 +24,9 @@ class InfoNCELoss(nn.Module):
         return (loss1 + loss2) / 2
 
 class PIMA_NEW(nn.Module):
+    """
+    The main Multimodal Architecture combining Vision, Language, and Graph branches.
+    """
     def __init__(self, embed_dim=256, use_ocr=False, pretrained=True):
         super(PIMA_NEW, self).__init__()
         
