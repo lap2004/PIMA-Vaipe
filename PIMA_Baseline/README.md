@@ -1,27 +1,27 @@
-# Mô hình 1: PIMA Baseline
+# Model 1: PIMA Baseline
 
-Thư mục `PIMA_Baseline` (thuộc hệ thống PIMA-VAIPE) chứa mã nguồn gốc của mô hình **PIMA Baseline**. Đây là phiên bản cơ sở chuẩn để so sánh và làm nền tảng cho các biến thể khác như PIMA_OCR hay PIMA_ablation.
+The `PIMA_Baseline` directory (part of the PIMA-VAIPE system) contains the original source code for the **PIMA Baseline** model. This is the standard foundational version used for comparison and serves as the basis for other variants like PIMA_OCR or PIMA_ablation.
 
-Mô hình này nhằm giải quyết bài toán **ghép cặp (matching)** giữa hình ảnh viên thuốc (Pill Image) và tên thuốc (Drug Name) trên đơn thuốc. Khác với phiên bản OCR tự động, ở mô hình Baseline này, hệ thống sử dụng **Ground Truth**, giả định rằng tọa độ (Bounding Box) và văn bản (Text) trên đơn thuốc đã được trích xuất chuẩn xác 100%.
-
----
-
-## 🔬 Kiến trúc Kỹ thuật
-
-Baseline sử dụng hai nhánh mạng nơ-ron chính để trích xuất đặc trưng đa phương thức (Multimodal):
-1. **Nhánh Hình ảnh (Vision):** Sử dụng mạng `ResNet50` để trích xuất đặc trưng ảnh từ các viên thuốc đã được cắt (cropped pill images).
-2. **Nhánh Văn bản & Không gian (Text & Spatial Graph):** Sử dụng Mạng Neural Đồ thị (`GraphSAGE`). Đồ thị được xây dựng từ các node văn bản, các cạnh liên kết dựa trên khoảng cách không gian (spatial coordinates) trên đơn thuốc. 
-
-**Cơ chế Ghép cặp (Matching):**
-- Hai luồng đặc trưng (ảnh và chữ/đồ thị) được chiếu (projected) vào cùng một không gian nhúng (embedding space).
-- Hàm mất mát **Contrastive Loss** được sử dụng để tối ưu khoảng cách: kéo gần các cặp (ảnh thuốc - tên thuốc) đúng và đẩy xa các cặp sai. 
-- Hàm **NLLLoss** được áp dụng bổ trợ để phân loại đồ thị.
+This model aims to solve the **matching** problem between the Pill Image and the Drug Name on the prescription. Unlike the automatic OCR version, this Baseline model utilizes **Ground Truth**, assuming that the bounding box coordinates and the text on the prescription have been extracted with 100% accuracy.
 
 ---
 
-## ⚙️ Cấu Trúc Mã Nguồn
+## 🔬 Technical Architecture
 
-- `train.py`: Script huấn luyện chính của mô hình Baseline. Nó nạp dữ liệu từ thư mục cấu hình sẵn, tiến hành huấn luyện qua các epoch và lưu lại trọng số tốt nhất `model_best.pth`. Nó tự động đánh giá Validation trong quá trình huấn luyện.
-- `inference.py`: Script chạy dự đoán thực tế. Khi đưa vào một cấu trúc dữ liệu đơn thuốc, mô hình sẽ tính toán độ tương đồng Cosine (Cosine Similarity) giữa ảnh và đồ thị chữ, sử dụng ngưỡng mềm (threshold > 0.5) để dự đoán thuốc tương ứng hoặc trả về "No match".
-- `preprocess.py`: Các hàm tiền xử lý dữ liệu và tạo đồ thị ban đầu cho mô hình chuẩn.
-- `config.py`: Tệp chứa các hằng số, cấu hình, siêu tham số và đường dẫn hệ thống.
+The Baseline utilizes two main neural network branches to extract multimodal features:
+1. **Vision Branch:** Uses a `ResNet50` network to extract image features from cropped pill images.
+2. **Text & Spatial Graph Branch:** Uses a Graph Neural Network (`GraphSAGE`). The graph is constructed from text nodes, with edges linked based on spatial coordinates on the prescription.
+
+**Matching Mechanism:**
+- The two feature streams (image and text/graph) are projected into the same embedding space.
+- A **Contrastive Loss** function is used to optimize the distance: pulling correct pairs (pill image - drug name) closer and pushing incorrect pairs further apart.
+- An **NLLLoss** function is applied as a supplementary loss for graph classification.
+
+---
+
+## ⚙️ Source Code Structure
+
+- `train.py`: The main training script for the Baseline model. It loads data from the configured directory, performs training across epochs, and saves the best weights as `model_best.pth`. It automatically evaluates on the Validation set during training.
+- `inference.py`: Script for running real-world predictions. When given a prescription data structure, the model computes the Cosine Similarity between the image and the text graph, using a soft threshold (> 0.5) to predict the corresponding drug or return "No match".
+- `preprocess.py`: Preprocessing functions and initial graph creation for the standard model.
+- `config.py`: File containing constants, configurations, hyperparameters, and system paths.

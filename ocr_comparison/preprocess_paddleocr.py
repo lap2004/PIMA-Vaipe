@@ -14,7 +14,7 @@ def main():
 
     ocr = PaddleOCR(use_angle_cls=False, det=False, use_gpu=False, lang='vi')
 
-    # Xử lý cả tập train và test
+    # Process both train and test sets
     for split in ['train', 'test']:
         label_dir = os.path.join(args.data_dir, f'prescriptions/{split}')
         
@@ -24,11 +24,11 @@ def main():
             image_dir = os.path.join(args.vaipe2022_dir, 'public_test/prescription/image')
 
         json_files = glob.glob(os.path.join(label_dir, '*.json'))
-        print(f"Tiến hành trích xuất OCR cho {len(json_files)} đơn thuốc tập {split}...")
+        print(f"Extracting OCR for {len(json_files)} prescriptions in {split} set...")
 
         for json_file in tqdm(json_files, desc=f"Processing OCR {split}"):
             base_name = os.path.basename(json_file).replace('.json', '')
-            # Ảnh gốc có đuôi .png (hoặc .jpg)
+            # Original image has .png (or .jpg) extension
             img_path = os.path.join(image_dir, f"{base_name}.png")
             if not os.path.exists(img_path):
                 img_path = os.path.join(image_dir, f"{base_name}.jpg")
@@ -44,7 +44,7 @@ def main():
 
             modified = False
             for box_data in data:
-                # Format của PIMA là: "box": [x_min, y_min, x_max, y_max]
+                # PIMA format is: "box": [x_min, y_min, x_max, y_max]
                 if 'box' not in box_data:
                     box_data['paddleocr_text'] = "unknown"
                     modified = True

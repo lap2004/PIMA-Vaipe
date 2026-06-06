@@ -79,7 +79,7 @@ class PrescriptionPillData(Dataset):
             src_range_x = (src_row["x_min"], src_row["x_max"])
             src_range_y = (src_row["y_min"], src_row["y_max"])
 
-            # Tính tâm của Box
+            # Calculate the center of the Box
             src_center_x, src_center_y = np.mean(
                 src_range_x), np.mean(src_range_y)
 

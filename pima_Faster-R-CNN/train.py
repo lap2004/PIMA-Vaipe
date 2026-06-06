@@ -202,7 +202,7 @@ def main():
         if (not is_ddp) or (is_ddp and dist.get_rank() == 0):
             print(f"Epoch {epoch+1}/{args.epochs} - Loss: {t_loss:.4f} - Match: {m_loss:.4f} - Cls: {c_loss:.4f} - Det: {d_loss:.4f}")
             
-            # Đánh giá trên tập validation
+            # Evaluate on validation set
             acc, correct, total = evaluate(model, val_loader, device, vision_model=args.vision_model)
             print(f"Validation Accuracy: {acc*100:.2f}% ({correct}/{total})")
             
@@ -231,7 +231,7 @@ def main():
                 print("Early stopping triggered!")
                 break
 
-    # THÊM VÀO: Đảm bảo tất cả các GPU chạy xong hết toàn bộ epoch rồi mới tiến hành ngắt kết nối
+    # ADDED: Ensure all GPUs finish the entire epoch before disconnecting
     if is_ddp:
         dist.barrier()  
         dist.destroy_process_group()

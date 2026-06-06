@@ -42,7 +42,7 @@ class PrescriptionPillData(Dataset):
             src_range_x = (src_row["x_min"], src_row["x_max"])
             src_range_y = (src_row["y_min"], src_row["y_max"])
 
-            # Xác định hàng xóm lân cận
+            # Determine nearest neighbors
             neighbor_vert_bot = []
             neighbor_hozi_right = []
 

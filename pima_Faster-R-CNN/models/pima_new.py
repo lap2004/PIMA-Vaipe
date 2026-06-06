@@ -9,13 +9,13 @@ class InfoNCELoss(nn.Module):
     def __init__(self, temperature=0.07):
         super(InfoNCELoss, self).__init__()
         import numpy as np
-        # Sử dụng tham số có thể học được (learnable parameter)
+        # Use learnable parameter
         self.logit_scale = nn.Parameter(torch.ones([]) * np.log(1 / temperature))
 
     def forward(self, features1, features2):
         features1 = F.normalize(features1, dim=1)
         features2 = F.normalize(features2, dim=1)
-        # Giới hạn logit_scale để tránh giá trị quá lớn
+        # Limit logit_scale to avoid excessively large values
         logit_scale = torch.clamp(self.logit_scale.exp(), max=100.0)
         logits = torch.matmul(features1, features2.T) * logit_scale
         B = logits.shape[0]

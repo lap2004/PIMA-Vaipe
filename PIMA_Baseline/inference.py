@@ -39,7 +39,7 @@ def inference(args):
             similarity = cos(image, sentences_projection)       
             max_sim, predicted = torch.max(similarity, 0)
             
-            # Ngưỡng similarity: nếu không có thuốc nào đạt > 0.5 thì là No match
+            # Similarity threshold: if no drug reaches > 0.5 then it's No match
             if max_sim.item() < 0.5:
                 print("Predicted: No match (max similarity = {:.4f})".format(max_sim.item()))
             else:

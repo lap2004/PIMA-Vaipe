@@ -6,25 +6,25 @@ import string
 
 def introduce_noise(text, noise_level=0.15):
     """
-    Giả lập lỗi OCR bằng cách thêm nhiễu vào text.
-    noise_level: Xác suất một từ bị thay đổi.
+    Simulate OCR error by adding noise to text.
+    noise_level: Probability of a word being modified.
     """
     if not text or random.random() > noise_level:
         return text
 
-    # Chỉ xáo trộn nhẹ các từ dài hơn 2 ký tự
+    # Only slightly perturb words longer than 2 characters
     if len(text) <= 2:
         return text
     
     chars = list(text)
-    num_errors = max(1, int(len(text) * 0.1)) # Tạo khoảng 10% lỗi trên số ký tự của chuỗi
+    num_errors = max(1, int(len(text) * 0.1)) # Generate about 10% errors based on string length
     
     for _ in range(num_errors):
         idx = random.randint(0, len(chars) - 1)
         action = random.choice(["replace", "drop", "insert"])
         
         if action == "replace":
-            # Thay thế bằng một ký tự ngẫu nhiên gần giống (giả lập lỗi OCR)
+            # Replace with a similar random character (simulate OCR error)
             chars[idx] = random.choice(string.ascii_letters + "0123456789")
         elif action == "drop":
             chars.pop(idx)
@@ -42,10 +42,10 @@ def process_directory(directory):
         for box in data:
             original_text = box.get('text', '')
             
-            # Tạo paddleocr_text bằng cách thêm nhiễu
+            # Create paddleocr_text by adding noise
             simulated_ocr = introduce_noise(original_text)
             
-            # Cập nhật vào dictionary
+            # Update to dictionary
             box['paddleocr_text'] = simulated_ocr
             
         with open(file_path, 'w', encoding='utf-8') as f:
@@ -55,12 +55,12 @@ if __name__ == "__main__":
     train_dir = "/home/lab/son/lap/vaipe_pima_format/prescriptions/train"
     test_dir = "/home/lab/son/lap/vaipe_pima_format/prescriptions/test"
     
-    print("Bắt đầu giả lập OCR text cho tập Train...")
+    print("Start simulating OCR text for Train set...")
     process_directory(train_dir)
-    print(f"Hoàn tất tập Train.")
+    print(f"Finished Train set.")
     
-    print("Bắt đầu giả lập OCR text cho tập Test...")
+    print("Start simulating OCR text for Test set...")
     process_directory(test_dir)
-    print(f"Hoàn tất tập Test.")
+    print(f"Finished Test set.")
     
-    print("Đã giả lập OCR xong! Giờ bạn có thể train bằng lệnh train_with_paddleocr.")
+    print("Finished simulating OCR! You can now train the model.")
